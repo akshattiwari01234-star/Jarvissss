@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>J.A.R.V.I.S. – AI Assistant</title>
+    <meta name="description" content="Jarvis AI Assistant – Voice-powered personal assistant with web UI" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+    <!-- ═══════════ Animated Background ═══════════ -->
+    <div id="bg-canvas" class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- ═══════════ Top Bar ═══════════ -->
+    <header id="topbar" class="topbar">
+        <div class="topbar-left">
+            <div class="logo-mark">
+                <div class="arc-reactor">
+                    <div class="arc-ring"></div>
+                    <div class="arc-core"></div>
+                </div>
+            </div>
+            <div class="logo-text">
+                <h1>J.A.R.V.I.S.</h1>
+                <span class="tagline">Just A Rather Very Intelligent System</span>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <div id="status-indicator" class="status-badge online">
+                <span class="status-dot"></span>
+                <span class="status-text">ONLINE</span>
+            </div>
+            <div id="clock" class="clock"></div>
+        </div>
+    </header>
+
+    <!-- ═══════════ Main Layout ═══════════ -->
+    <main class="main-grid">
+        <!-- ── Left Panel: Quick Actions ── -->
+        <aside class="panel panel-left glass">
+            <div class="panel-header">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <h2>Quick Actions</h2>
+            </div>
+            <div class="actions-grid" id="quick-actions">
+                <button class="action-card" data-cmd="open google" id="btn-google">
+                    <div class="action-icon">🔍</div>
+                    <span>Google</span>
+                </button>
+                <button class="action-card" data-cmd="open youtube" id="btn-youtube">
+                    <div class="action-icon">▶️</div>
+                    <span>YouTube</span>
+                </button>
+                <button class="action-card" data-cmd="open github" id="btn-github">
+                    <div class="action-icon">💻</div>
+                    <span>GitHub</span>
+                </button>
+                <button class="action-card" data-cmd="open linkedin" id="btn-linkedin">
+                    <div class="action-icon">💼</div>
+                    <span>LinkedIn</span>
+                </button>
+                <button class="action-card" data-cmd="open instagram" id="btn-instagram">
+                    <div class="action-icon">📸</div>
+                    <span>Instagram</span>
+                </button>
+                <button class="action-card" data-cmd="open spotify" id="btn-spotify">
+                    <div class="action-icon">🎧</div>
+                    <span>Spotify</span>
+                </button>
+                <button class="action-card" data-cmd="open reddit" id="btn-reddit">
+                    <div class="action-icon">🗞️</div>
+                    <span>Reddit</span>
+                </button>
+                <button class="action-card" data-cmd="open twitter" id="btn-twitter">
+                    <div class="action-icon">🐦</div>
+                    <span>Twitter</span>
+                </button>
+            </div>
+
+            <!-- Music Library -->
+            <div class="panel-header" style="margin-top: 1.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                <h2>Music Library</h2>
+            </div>
+            <div id="music-library" class="music-list"></div>
+        </aside>
+
+        <!-- ── Centre: Command Console ── -->
+        <section class="panel panel-centre glass">
+            <div class="panel-header">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                <h2>Command Console</h2>
+            </div>
+
+            <!-- Chat / Output Area -->
+            <div id="console-output" class="console-output">
+                <div class="welcome-message">
+                    <div class="welcome-arc">
+                        <div class="arc-reactor large">
+                            <div class="arc-ring"></div>
+                            <div class="arc-core"></div>
+                        </div>
+                    </div>
+                    <h2>Welcome, Sir.</h2>
+                    <p>Jarvis at your service. Type a command or click a quick action to begin.</p>
+                    <div class="welcome-hints">
+                        <code>open youtube</code>
+                        <code>play believer</code>
+                        <code>news</code>
+                        <code>help</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Command Input -->
+            <form id="command-form" class="command-bar" autocomplete="off">
+                <div class="input-wrapper">
+                    <div class="input-glow"></div>
+                    <input
+                        type="text"
+                        id="command-input"
+                        placeholder="Enter command…  (e.g. 'open youtube', 'play believer', 'news')"
+                        autofocus
+                    />
+                </div>
+                <button type="submit" id="send-btn" class="send-btn" title="Execute Command">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+            </form>
+        </section>
+
+        <!-- ── Right Panel: News / Info ── -->
+        <aside class="panel panel-right glass">
+            <div class="panel-header">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2"/></svg>
+                <h2>News Feed</h2>
+                <button id="refresh-news" class="icon-btn" title="Refresh News">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+                </button>
+            </div>
+            <div id="news-feed" class="news-feed">
+                <div class="news-placeholder">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2"/></svg>
+                    <p>Type <code>news</code> or click refresh to load headlines</p>
+                </div>
+            </div>
+
+            <!-- Command History -->
+            <div class="panel-header" style="margin-top: 1.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <h2>History</h2>
+            </div>
+            <div id="history-feed" class="history-feed"></div>
+        </aside>
+    </main>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
